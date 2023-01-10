@@ -7,6 +7,19 @@
   <title>Document</title>
 </head>
 <body>
+  <h2>Characters</h2>
+
+
+<form method="POST" action="{% url 'home' %}">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" name="create" value="Create" />
+</form>
+<ul>
+  {% for character in character_list %}
+    <li>{{ character.name }}</li>
+  {% endfor %}
+</ul>
 
 </body>
 </html>
