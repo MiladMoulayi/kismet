@@ -7,19 +7,33 @@
   <title>Document</title>
 </head>
 <body>
-  <h2>Characters</h2>
+  <h2>Kismet</h2>
+  <p>Before you start your journey please choose your path!</p>
 
 
 <form method="POST" action="{% url 'home' %}">
   {% csrf_token %}
   {{ form }}
-  <input type="submit" name="create" value="Create" />
+  <div>
+    <p>
+      Path of Virtue
+      <input type="submit" name="create" value="Create" />
+    </p>
+    <p>
+      Path of Vice
+      <input type="submit" name="create" value="Create" />
+    </p>
+    <p>
+      Path of Neutrality 
+      <input type="submit" name="create" value="Create" />
+    </p>
+  </div>
 </form>
-<ul>
+{% comment %} <ul>
   {% for character in character_list %}
     <li>{{ character.name }}</li>
   {% endfor %}
-</ul>
+</ul> {% endcomment %}
 
 </body>
 </html>

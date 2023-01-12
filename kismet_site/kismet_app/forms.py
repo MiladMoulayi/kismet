@@ -9,7 +9,7 @@ class CharacterForm(ModelForm):
 class ScenarioForm(ModelForm):
   class Meta:
     model = Scenario
-    fields = ['name', 'description']
+    fields = ['name', 'description', 'option1', 'option2', 'option3', 'winning_option']
 
 class ChoiceForm(ModelForm):
   class Meta:
