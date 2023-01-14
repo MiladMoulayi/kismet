@@ -9,34 +9,70 @@ import random
 # Updated code
 
 class CreateView(View):
-    def get(self, request):
-        return render(request, 'create.html')
-
     def post(self, request):
-        character = request.POST.get('character')
         name = request.POST.get('name')
+        alignment = request.POST.get('alignment')
         try:
-            player = Character.objects.get(name=name) # try to retrieve the player by name
+            character = Character.objects.get(name=name)
         except Character.DoesNotExist:
-            player = Character.objects.create(name=name, character=character) #create a new player
+            character = Character.objects.create(name=name, alignment=alignment)
+        request.session['character'] = character
         return redirect('game')
 
 class GameView(View):
     def get(self, request):
-        scenarios = Scenario.objects.all() #fetches all of the made scenarios 
-        scenario = random.choice(scenarios) #retrieves a scenario at random
-        # character = request.session.get('character') > Troubleshooting adding the charatcher to the database
-        context = {'scenario': scenario}
-        return render(request, 'game.html', context)
-    
+        character = request.session.get('character')
+        if character:
+            scenario = Scenario.objects.filter(characterName=character).order_by("?").first()
+            context = {'scenario': scenario, 'character': character}
+            return render(request, 'game.html', context)
+        else:
+            return redirect('create')
+        
     def post(self, request):
-            choice = request.POST.get('choice')
-            scenario = Scenario.objects.get(pk=1)
-            # check if the choice matches the winning option of the scenario
-            if choice == scenario.winning_option:
-                return render(request, 'win.html')
+        choice_id = request.POST.get('choice_id')
+        try:
+            choice = Choice.objects.get(pk=choice_id)
+            outcome = Outcome.objects.get(choice=choice)
+            if outcome.win:
+                return redirect('win')
             else:
-                return render(request, 'lose.html')
+                return redirect('lose')
+        except (Choice.DoesNotExist, Outcome.DoesNotExist):
+            return redirect('game')
+
+
+
+
+# class CreateView(View):
+#     def get(self, request):
+#         return render(request, 'create.html')
+
+#     def post(self, request):
+#         character = request.POST.get('character')
+#         name = request.POST.get('name')
+#         try:
+#             player = Character.objects.get(name=name) # try to retrieve the player by name
+#         except Character.DoesNotExist:
+#             player = Character.objects.create(name=name, character=character) #create a new player
+#         return redirect('game')
+
+# class GameView(View):
+#     def get(self, request):
+#         scenarios = Scenario.objects.all() #fetches all of the made scenarios 
+#         scenario = random.choice(scenarios) #retrieves a scenario at random
+#         # character = request.session.get('character') > Troubleshooting adding the charatcher to the database
+#         context = {'scenario': scenario}
+#         return render(request, 'game.html', context)
+    
+#     def post(self, request):
+#             choice = request.POST.get('choice')
+#             scenario = Scenario.objects.get(pk=1)
+#             # check if the choice matches the winning option of the scenario
+#             if choice == scenario.winning_option:
+#                 return render(request, 'win.html')
+#             else:
+#                 return render(request, 'lose.html')
 
 class WinView(View):
     def get(self, request):

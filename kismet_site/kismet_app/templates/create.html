@@ -12,14 +12,13 @@
     <p>Please choose a character and give it a name:</p>
     <form action="game" method="POST">
       {% csrf_token %}
-      {{ form }}
-      <input type="radio" name="character" value="good" checked> Good<br>
+      input type="radio" name="character" value="good" checked> Good<br>
       <input type="radio" name="character" value="evil"> Evil<br>
       <input type="radio" name="character" value="neutral"> Neutral<br>
       <br>
       Character Name: <input type="text" name="name"><br>
       <br>
-      <input type="submit" value="Start Game">
+      <input type="submit" value="Start Game"><
     </form>
   </body>
 </html>
