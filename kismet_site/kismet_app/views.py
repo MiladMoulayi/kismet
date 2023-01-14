@@ -29,21 +29,21 @@ class CreateView(View):
 class GameView(View):
     def get(self, request):
         scenarios = Scenario.objects.all() #fetches all of the made scenarios
-        scenario = Scenario.objects.get(id=21) #retrieves a scenario at random
+        scenario = Scenario.objects.get(id=23) #retrieves a scenario at random
         # character = request.session.get('character') > Troubleshooting adding the charatcher to the database
         context = {
             'scenario': scenario,
-            'choice1': Choice.objects.get(id=1).name,
-            'choice2': Choice.objects.get(id=2).name,
-            'choice3': Choice.objects.get(id=3).name
+            'choice1': Choice.objects.get(type='Good').name,
+            'choice2': Choice.objects.get(type='Neutral').name,
+            'choice3': Choice.objects.get(type='Evil').name
             }
         return render(request, 'game.html', context)
 
     def post(self, request):
             choice = request.POST.get('choice')
-            scenario = Scenario.objects.get(id=21)
+            scenario = Scenario.objects.get(name='In Time of Need')
             # check if the choice matches the winning option of the scenario
-            if choice == Choice.objects.get(id=1).name:
+            if choice == Choice.objects.get(type='Good').name:
                 return redirect('win')
             else:
                 return redirect('lose')

@@ -30,3 +30,4 @@ class Choice(models.Model):
 class Outcome(models.Model):
   name = models.CharField(max_length=255)
   type = models.CharField(max_length=255)
+  choices = models.ManyToManyField(Choice)
