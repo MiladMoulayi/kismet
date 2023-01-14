@@ -10,10 +10,11 @@
   <body>
     <h1>{{ scenario.name }}</h1>
     <p>{{ scenario.description }}</p>
-    <form action="game.html" method="POST">
-      <input type="radio" name="choice" value="{{ scenario.option1 }}"> {{ scenario.option1 }}<br>
-      <input type="radio" name="choice" value="{{ scenario.option2 }}"> {{ scenario.option2 }}<br>
-      <input type="radio" name="choice" value="{{ scenario.option3 }}"> {{ scenario.option3 }}<br>
+    <form method="POST">
+      {% csrf_token %}
+      <input type="radio" name="choice" value="{{ choice1 }}"> {{ choice1 }}<br>
+      <input type="radio" name="choice" value="{{ choice2 }}"> {{ choice2 }}<br>
+      <input type="radio" name="choice" value="{{ choice3 }}"> {{ choice3 }}<br>
       <br>
       <input type="submit" value="Choose">
     </form>
