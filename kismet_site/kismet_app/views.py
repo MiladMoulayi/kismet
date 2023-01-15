@@ -65,6 +65,15 @@ class OutcomeView(View):
         }
         return render(request, 'outcome.html', context)
 
+    def post(self, request, type):
+        choice = Choice.objects.get(name=request.POST.get('choice'))
+        choice.save()
+        print(choice.type)
+        if choice.type == "Good":
+            return redirect('win')
+        else: 
+            return redirect("lose")
+    
 class WinView(View):
     def get(self, request):
         return render(request, 'win.html')
