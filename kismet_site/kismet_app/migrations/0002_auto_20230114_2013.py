@@ -41,10 +41,13 @@ def load_data(apps, schema_editor):
     academic_outcome_1.save()
     maybe_choice1 = Choice.objects.create(name='Tell her nothing and head to class.', type='Good', the_scenario=academic_honesty, level=1)
     maybe_choice1.save()
-    maybe_choice2 = Choice.objects.create(name='Tell her What your classmate wanted and what he said.', type='Good', the_scenario=academic_honesty, level=1)
+    maybe_choice2 = Choice.objects.create(name='Tell her what your classmate wanted and what he said.', type='Neutral', the_scenario=academic_honesty, level=1)
     maybe_choice2.save()
+    maybe_choice3 = Choice.objects.create(name='Tell her that your classmate threatened to beat you up if you didn\'t give him your homework', type='Evil', the_scenario=academic_honesty, level=1)
+    maybe_choice3.save()
     academic_outcome_1.choices.add(maybe_choice1)
     academic_outcome_1.choices.add(maybe_choice2)
+    academic_outcome_1.choices.add(maybe_choice3)
     academic_outcome_2 = Outcome.objects.create(
         name = 'You open up your backpack and allow your classmate to see your homework. The moment your classmate has your homework in his possession he puts it in his backpack and walks to class. What do you do now?',
         type = 'Evil',

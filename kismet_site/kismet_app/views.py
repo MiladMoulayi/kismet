@@ -54,8 +54,14 @@ class GameView(View):
 class OutcomeView(View):
     def get(self, request, type):
         outcome = Outcome.objects.get(type=type)
+        choice1 = outcome.choices.get(type='Good')
+        choice2 = outcome.choices.get(type='Neutral')
+        choice3 = outcome.choices.get(type='Evil')
         context = {
             'outcome': outcome,
+            'choice1': choice1.name,
+            'choice2': choice2.name,
+            'choice3': choice3.name
         }
         return render(request, 'outcome.html', context)
 
