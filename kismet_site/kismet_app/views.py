@@ -112,35 +112,18 @@ class HomeView(View):
 class CharacterDetailView(View):
   def get(self, request, character_id):
     character=Character.objects.get(id=character_id)
+    character_form=CharacterForm()
+    html_data = {
+       'character_name': character.name,
+        "alignment": character.alignment, 
+        "form": character_form,
+    }
+    return render(request=request,template_name='character_detail.html', context=html_data)
 
-# class GameplayView(View):
-#   def get(self, request):
-#     character_form = CharacterForm()
-#     characters = Character.objects.all()
-#     choice_form = ChoiceForm()
-#     choices = Choice.objects.all()
-#     outcome_form = OutcomeForm()
-#     outcomes = Outcome.objects.all()
-#     scenario_form = ScenarioForm()
-#     scenarios = Scenario.objects.all()
-
-#     html_data = {
-#       'character_list': characters,
-#       'character_form': character_form,
-#       'choice_list': choices,
-#       'choice_form': choice_form,
-#       'outcome_list': outcomes,
-#       'outcome_form': outcome_form,
-#       'scenario_list': scenarios,
-#       'scenario_form': scenario_form
-#     }
-
-#     return render(
-#         request=request,
-#         template_name='game.html',
-#         context=html_data,
-#     )
-
+def post(self, request, character_id, character_name):
+    character=Character.objects.get(id=character_id)
+    character.save()
+    new_name=request.POST.get('update_name')
 # class StartView(View):
 #   def get(self, request):
 #     character_form = CharacterForm()
