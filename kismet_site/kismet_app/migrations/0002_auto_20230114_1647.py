@@ -54,9 +54,9 @@ def delete_data(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('kismet_app', '0007_outcome_choices'),
+        ('kismet_app', '0001_auto_20230114_1642'),
     ]
 
     operations = [
-        migrations.RunPython(load_data, delete_data),
+        migrations.RunPython(load_data, delete_data)
     ]

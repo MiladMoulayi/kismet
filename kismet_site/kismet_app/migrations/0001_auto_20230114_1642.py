@@ -5,7 +5,6 @@ from django.db import migrations, models
 def load_data(apps, schema_editor):
     Scenario = apps.get_model('kismet_app', 'Scenario')
     Choice = apps.get_model('kismet_app', 'Choice')
-    Outcome = apps.get_model('kismet_app', 'Outcome')
     in_time_of_need = Scenario.objects.create(
         name = 'In Time of Need',
         description = 'Decide whether or not to help your neighbor jumpstart his car'
@@ -29,21 +28,6 @@ def load_data(apps, schema_editor):
         the_scenario = in_time_of_need
     )
     need_choice_3.save()
-    need_outcome_1 = Outcome.objects.create(
-        name = 'Your neighbor views you as a reliable person and offers you free Uber rides in the future',
-        type = 'Good'
-    )
-    need_outcome_1.save()
-    need_outcome_2 = Outcome.objects.create(
-        name = 'Your neighbor views you as someone who is not concerned with the suffering of others and ignores you in future interactions',
-        type = 'Neutral'
-    )
-    need_outcome_2.save()
-    need_outcome_3 = Outcome.objects.create(
-        name = 'Your neighbor cusses you out for making fun of him and the next day you find that your car has been keyed',
-        type = 'Evil'
-    )
-    need_outcome_3.save()
 
 def delete_data(apps, schema_editor):
     Scenario = apps.get_model('kismet_app', 'Scenario')
@@ -54,7 +38,7 @@ def delete_data(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('kismet_app', '0007_outcome_choices'),
+        ('kismet_app', 'data_migrations'),
     ]
 
     operations = [
