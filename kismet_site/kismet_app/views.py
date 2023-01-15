@@ -26,10 +26,19 @@ class CreateView(View):
             player = Character.objects.create(name=name, character=character) #create a new player
         return redirect('game')
 
+class OutcomeView(View):
+    def get(self, request, type):
+        outcome = Outcome.objects.get(type=type)
+        context = {
+            'outcome': outcome,
+        }
+        return render(request, 'outcome.html', context)
+
+
 class GameView(View):
     def get(self, request):
         scenarios = Scenario.objects.all() #fetches all of the made scenarios
-        scenario = Scenario.objects.get(id=23) #retrieves a scenario at random
+        scenario = Scenario.objects.get(name='In Time of Need') #retrieves a scenario
         # character = request.session.get('character') > Troubleshooting adding the charatcher to the database
         context = {
             'scenario': scenario,
@@ -40,13 +49,17 @@ class GameView(View):
         return render(request, 'game.html', context)
 
     def post(self, request):
-            choice = request.POST.get('choice')
+            choice = Choice.objects.get(name=request.POST.get('choice'))
+            choice.save()
             scenario = Scenario.objects.get(name='In Time of Need')
             # check if the choice matches the winning option of the scenario
-            if choice == Choice.objects.get(type='Good').name:
-                return redirect('win')
-            else:
-                return redirect('lose')
+            # if choice == Choice.objects.get(type='Good').name:
+            print(choice.type)
+            return redirect('outcome', type=choice.type)
+            # elif choice == Choice.objects.get(type='Neutral').name:
+            #     return redirect('outcome', type=choice.type)
+            # elif choice == Choice.objects.get(type='Evil').name:
+            #     return redirect('outcome')
 
 
 class WinView(View):

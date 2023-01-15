@@ -19,6 +19,6 @@ class ChoiceForm(ModelForm):
 class OutcomeForm(ModelForm):
   class Meta:
     model = Outcome
-    fields = ['name', 'type']
+    fields = ['name', 'type', 'choices']
 
 
