@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.core.exceptions import ObjectDoesNotExist
 from django.views import View
 from kismet_app.forms import CharacterForm, ScenarioForm, ChoiceForm, OutcomeForm
 from kismet_app.models import Character, Scenario, Choice, Outcome
@@ -55,9 +56,13 @@ class GameView(View):
 class OutcomeView(View):
     def get(self, request, type):
         outcome = Outcome.objects.get(type=type)
-        choice1 = outcome.choices.get(type='Good')
-        choice2 = outcome.choices.get(type='Neutral')
-        choice3 = outcome.choices.get(type='Evil')
+        try:
+            choice1 = outcome.choices.get(type='Good')
+            choice2 = outcome.choices.get(type='Neutral')
+            choice3 = outcome.choices.get(type='Evil')
+        except ObjectDoesNotExist:
+            return redirect('outcome_tattle_tale')
+
         context = {
             'outcome': outcome,
             'choice1': choice1.name,
@@ -74,6 +79,19 @@ class OutcomeView(View):
             return redirect('win')
         else:
             return redirect("lose")
+
+class OutcomeTattleTaleView(View):
+    def get(self, request):
+        tattle_tale_choice=Choice.objects.get(name='Tell the teacher.')
+        tattle_tale_outcome=Outcome.objects.get(type='Neutral')
+
+        html_data= {
+            'choice': tattle_tale_choice,
+            'outcome': tattle_tale_outcome
+        }
+
+
+        return render(request, 'outcome_tattle_tale.html', context=html_data)
 
 class WinView(View):
     def get(self, request):
