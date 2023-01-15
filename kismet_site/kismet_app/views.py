@@ -19,12 +19,13 @@ class CreateView(View):
 
     def post(self, request):
         character = request.POST.get('character')
+        character_id = character.id
         name = request.POST.get('name')
         try:
             player = Character.objects.get(name=name) # try to retrieve the player by name
         except Character.DoesNotExist:
             player = Character.objects.create(name=name, character=character) #create a new player
-        return redirect('game')
+        return redirect('character_detail', character_id)
 
 class GameView(View):
     def get(self, request):
@@ -68,12 +69,12 @@ class OutcomeView(View):
     def post(self, request, type):
         choice = Choice.objects.get(name=request.POST.get('choice'))
         choice.save()
-        print(choice.type)
+
         if choice.type == "Good":
             return redirect('win')
-        else: 
+        else:
             return redirect("lose")
-    
+
 class WinView(View):
     def get(self, request):
         return render(request, 'win.html')
@@ -112,33 +113,42 @@ class HomeView(View):
 class CharacterDetailView(View):
   def get(self, request, character_id):
     character=Character.objects.get(id=character_id)
-    character_form=CharacterForm()
+    character_form=CharacterForm(instance=character)
     html_data = {
-       'character_name': character.name,
-        "alignment": character.alignment, 
-        "form": character_form,
+        'character_name': character.name,
+        'alignment': character.alignment,
+        'form': character_form,
     }
-    return render(request=request,template_name='character_detail.html', context=html_data)
+    return render(
+        request=request,
+        template_name='character_detail.html',
+        context=html_data
+    )
 
-def post(self, request, character_id, character_name):
+  def post(self, request, character_id):
     character=Character.objects.get(id=character_id)
-    character.save()
-    new_name=request.POST.get('update_name')
-# class StartView(View):
-#   def get(self, request):
-#     character_form = CharacterForm()
-#     characters = Character.objects.all()
 
-#     html_data = {
-#       'character_list': characters,
-#       'form': character_form,
-#     }
+    if 'update' in request.POST:
+        character_form = CharacterForm(request.POST, instance=character)
+        character_form.save()
+    elif 'delete' in request.POST:
+        character.delete()
 
-#     return render(
-#         request=request,
-#         template_name='index.html',
-#         context=html_data,
-#     )
+    return redirect('character_list')
+
+class CharacterListView(View):
+  def get(self, request):
+    characters = Character.objects.all()
+
+    html_data = {
+      'character_list': characters,
+    }
+
+    return render(
+        request=request,
+        template_name='character_list.html',
+        context=html_data,
+    )
 
 #   def post(self, request):
 #     print(request.POST)

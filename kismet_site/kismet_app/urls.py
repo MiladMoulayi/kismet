@@ -1,5 +1,5 @@
 from django.urls import path
-from kismet_app.views import HomeView, CreateView, GameView, WinView, LoseView, OutcomeView, CharacterDetailView
+from kismet_app.views import HomeView, CreateView, GameView, WinView, LoseView, OutcomeView, CharacterDetailView, CharacterListView
 from . import views
 
 urlpatterns = [
@@ -9,7 +9,8 @@ urlpatterns = [
   path('lose', LoseView.as_view(), name='lose'),
   path('create', CreateView.as_view(), name='create'),
   path('outcome/<str:type>', OutcomeView.as_view(), name='outcome'),
-  path('character_detail', CharacterDetailView.as_view(), name="character_detail")
+  path('character_detail/<int:character_id>', CharacterDetailView.as_view(), name='character_detail'),
+  path('character_list', CharacterListView.as_view(), name='character_list')
 ]
 
 
