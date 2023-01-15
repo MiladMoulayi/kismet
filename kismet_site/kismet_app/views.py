@@ -26,6 +26,31 @@ class CreateView(View):
             player = Character.objects.create(name=name, character=character) #create a new player
         return redirect('game')
 
+class GameView(View):
+    def get(self, request):
+        scenarios = Scenario.objects.all() #fetches all of the made scenarios
+        scenario = random.choice(scenarios)
+        # scenario = Scenario.objects.get(name='In Time of Need') #retrieves a scenario
+        # character = request.session.get('character') > Troubleshooting adding the charatcher to the database
+        context = {
+            'scenario': scenario,
+            'choice1': Choice.objects.get(type='Good', the_scenario=scenario, level=0).name,
+            'choice2': Choice.objects.get(type='Neutral', the_scenario=scenario, level=0).name,
+            'choice3': Choice.objects.get(type='Evil', the_scenario=scenario, level=0).name
+            }
+        return render(request, 'game.html', context)
+
+    def post(self, request):
+            choice = Choice.objects.get(name=request.POST.get('choice'))
+            choice.save()
+            # check if the choice matches the winning option of the scenario
+            # if choice == Choice.objects.get(type='Good').name:
+            return redirect('outcome', type=choice.type)
+            # elif choice == Choice.objects.get(type='Neutral').name:
+            #     return redirect('outcome', type=choice.type)
+            # elif choice == Choice.objects.get(type='Evil').name:
+            #     return redirect('outcome')
+
 class OutcomeView(View):
     def get(self, request, type):
         outcome = Outcome.objects.get(type=type)
@@ -33,34 +58,6 @@ class OutcomeView(View):
             'outcome': outcome,
         }
         return render(request, 'outcome.html', context)
-
-
-class GameView(View):
-    def get(self, request):
-        scenarios = Scenario.objects.all() #fetches all of the made scenarios
-        scenario = Scenario.objects.get(name='In Time of Need') #retrieves a scenario
-        # character = request.session.get('character') > Troubleshooting adding the charatcher to the database
-        context = {
-            'scenario': scenario,
-            'choice1': Choice.objects.get(type='Good').name,
-            'choice2': Choice.objects.get(type='Neutral').name,
-            'choice3': Choice.objects.get(type='Evil').name
-            }
-        return render(request, 'game.html', context)
-
-    def post(self, request):
-            choice = Choice.objects.get(name=request.POST.get('choice'))
-            choice.save()
-            scenario = Scenario.objects.get(name='In Time of Need')
-            # check if the choice matches the winning option of the scenario
-            # if choice == Choice.objects.get(type='Good').name:
-            print(choice.type)
-            return redirect('outcome', type=choice.type)
-            # elif choice == Choice.objects.get(type='Neutral').name:
-            #     return redirect('outcome', type=choice.type)
-            # elif choice == Choice.objects.get(type='Evil').name:
-            #     return redirect('outcome')
-
 
 class WinView(View):
     def get(self, request):

@@ -26,8 +26,11 @@ class Choice(models.Model):
   name = models.CharField(max_length=255)
   type = models.CharField(max_length=255)
   the_scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE, null=True, blank=True)
+  level = models.PositiveSmallIntegerField(default=0)
 
 class Outcome(models.Model):
   name = models.CharField(max_length=255)
   type = models.CharField(max_length=255)
   choices = models.ManyToManyField(Choice)
+  scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE, null=True, blank=True)
+  level = models.PositiveSmallIntegerField(default=0)
