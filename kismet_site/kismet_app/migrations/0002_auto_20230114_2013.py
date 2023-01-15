@@ -2,59 +2,72 @@
 
 from django.db import migrations
 
-from django.db import migrations, models
-
 def load_data(apps, schema_editor):
     Scenario = apps.get_model('kismet_app', 'Scenario')
     Choice = apps.get_model('kismet_app', 'Choice')
     Outcome = apps.get_model('kismet_app', 'Outcome')
     academic_honesty = Scenario.objects.create(
         name = 'Academic Honesty',
-        description = 'You\'ve woken up, did your usual morning routine, and leave your house to go to school. Upon your arrival at school, one of your classmates asks to see your homework. What do you do?')
+        description = 'You\'ve woken up, did your usual morning routine, and leave your house to go to school. Upon your arrival at school, one of your classmates asks to see your homework. What do you do?'
+        )
     academic_honesty.save()
     academic_choice_1 = Choice.objects.create(
         name = 'Tell him no.',
         type = 'Good',
-        the_scenario = academic_honesty
+        the_scenario = academic_honesty,
+        level = 0
     )
     academic_choice_1.save()
     academic_choice_2 = Choice.objects.create(
         name = 'Tell the teacher.',
         type = 'Neutral',
-        the_scenario = academic_honesty
+        the_scenario = academic_honesty,
+        level = 0
     )
     academic_choice_2.save()
     academic_choice_3 = Choice.objects.create(
         name = 'Let him see it.',
         type = 'Evil',
-        the_scenario = academic_honesty
+        the_scenario = academic_honesty,
+        level = 0
     )
     academic_choice_3.save()
     academic_outcome_1 = Outcome.objects.create(
         name = 'Your classmate has become enraged. He proceeds to yell insults and threats at you. All of this commotion has led to your teacher to intervene. She asks you “what\'s wrong?”',
-        type = 'Good'
+        type = 'Good',
+        scenario = academic_honesty,
+        level = 0
     )
     academic_outcome_1.save()
-    maybe_choice1 = Choice.objects.create(name='Tell her nothing and head to class.', type='Good', the_scenario=academic_honesty)
+    maybe_choice1 = Choice.objects.create(name='Tell her nothing and head to class.', type='Good', the_scenario=academic_honesty, level=1)
     maybe_choice1.save()
-    maybe_choice2 = Choice.objects.create(name='Tell her What your classmate wanted and what he said.', type='Good', the_scenario=academic_honesty)
+    maybe_choice2 = Choice.objects.create(name='Tell her What your classmate wanted and what he said.', type='Good', the_scenario=academic_honesty, level=1)
     maybe_choice2.save()
     academic_outcome_1.choices.add(maybe_choice1)
     academic_outcome_1.choices.add(maybe_choice2)
     academic_outcome_2 = Outcome.objects.create(
         name = 'You open up your backpack and allow your classmate to see your homework. The moment your classmate has your homework in his possession he puts it in his backpack and walks to class. What do you do now?',
-        type = 'Evil'
+        type = 'Evil',
+        scenario = academic_honesty,
+        level = 0
     )
     academic_outcome_2.save()
-    a_possible_choice1 = Choice.objects.create(name='His back is turned. Time to strike!', type='Evil', the_scenario=academic_honesty)
+    a_possible_choice1 = Choice.objects.create(name='His back is turned. Time to strike!', type='Evil', the_scenario=academic_honesty, level=1)
     a_possible_choice1.save()
-    a_possible_choice2 = Choice.objects.create(name='Go to class and tell the professor what happened.', type='Good', the_scenario=academic_honesty)
+    a_possible_choice2 = Choice.objects.create(name='Go to class and tell the professor what happened.', type='Good', the_scenario=academic_honesty, level=1)
     a_possible_choice2.save()
-    a_possible_choice3 = Choice.objects.create(name='Call your classmate back and tell him that you want your homework back', type='Neutral', the_scenario=academic_honesty)
+    a_possible_choice3 = Choice.objects.create(name='Call your classmate back and tell him that you want your homework back', type='Neutral', the_scenario=academic_honesty, level=1)
     a_possible_choice3.save()
     academic_outcome_2.choices.add(a_possible_choice1)
     academic_outcome_2.choices.add(a_possible_choice2)
     academic_outcome_2.choices.add(a_possible_choice3)
+    academic_outcome_3 = Outcome.objects.create(
+        name = 'The teacher gives your classmate a stern talking to, sends him to the principal\'s office, and he is sent to continuation school for his consistently poor school performance',
+        type = 'Neutral',
+        scenario = academic_honesty,
+        level = 0
+    )
+    academic_outcome_3.save()
     # need_outcome_3 = Outcome.objects.create(
     #     name = 'Your neighbor cusses you out for making fun of him and the next day you find that your car has been keyed',
     #     type = 'Evil'
@@ -70,7 +83,7 @@ def delete_data(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('kismet_app', '0004_auto_20230114_1846'),
+        ('kismet_app', '0001_initial'),
     ]
 
     operations = [
