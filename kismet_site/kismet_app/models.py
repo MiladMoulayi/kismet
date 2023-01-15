@@ -14,10 +14,10 @@ class Character(models.Model):
 class Scenario(models.Model):
   name = models.CharField(max_length=255)
   description = models.CharField(max_length=255)
-  option1 = models.CharField(max_length=200, default='add')
-  option2 = models.CharField(max_length=200, default='add')
-  option3 = models.CharField(max_length=200, default='add')
-  winning_option = models.CharField(max_length=200, default='add')
+  # option1 = models.CharField(max_length=200, default='add', null=True)
+  # option2 = models.CharField(max_length=200, default='add', null=True)
+  # option3 = models.CharField(max_length=200, default='add', null=True)
+  # winning_option = models.CharField(max_length=200, default='add', null=True)
 
   def __str__(self):
       return self.name
@@ -25,7 +25,12 @@ class Scenario(models.Model):
 class Choice(models.Model):
   name = models.CharField(max_length=255)
   type = models.CharField(max_length=255)
+  the_scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE, null=True, blank=True)
+  level = models.PositiveSmallIntegerField(default=0)
 
 class Outcome(models.Model):
   name = models.CharField(max_length=255)
   type = models.CharField(max_length=255)
+  choices = models.ManyToManyField(Choice)
+  scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE, null=True, blank=True)
+  level = models.PositiveSmallIntegerField(default=0)

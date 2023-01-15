@@ -9,7 +9,7 @@ class CharacterForm(ModelForm):
 class ScenarioForm(ModelForm):
   class Meta:
     model = Scenario
-    fields = ['name', 'description', 'option1', 'option2', 'option3', 'winning_option']
+    fields = ['name', 'description']
 
 class ChoiceForm(ModelForm):
   class Meta:
@@ -19,6 +19,6 @@ class ChoiceForm(ModelForm):
 class OutcomeForm(ModelForm):
   class Meta:
     model = Outcome
-    fields = ['name', 'type']
+    fields = ['name', 'type', 'choices']
 
 

@@ -5,6 +5,11 @@ from kismet_app.models import Character, Scenario, Choice, Outcome
 import random
 # Create your views here.
 
+# in_time_of_need = Scenario.objects.create(name='In time of need', description='Decide whether or not to help your neighbor jumpstart his car')
+# choice1 = Choice.objects.create(name='Get your jumper cables and help him', type='Good', scenario=in_time_of_need)
+# choice2 = Choice.objects.create(name='Ignore him and continue to your car', type='Neutral', scenario=in_time_of_need)
+# choice3 = Choice.objects.create(name='Laugh at him and tell him that\'s what he gets for buying a Chevy', type='Evil', scenario=in_time_of_need)
+
 
 # Updated code
 
@@ -23,20 +28,42 @@ class CreateView(View):
 
 class GameView(View):
     def get(self, request):
-        scenarios = Scenario.objects.all() #fetches all of the made scenarios 
-        scenario = random.choice(scenarios) #retrieves a scenario at random
+        scenarios = Scenario.objects.all() #fetches all of the made scenarios
+        scenario = random.choice(scenarios)
+        # scenario = Scenario.objects.get(name='In Time of Need') #retrieves a scenario
         # character = request.session.get('character') > Troubleshooting adding the charatcher to the database
-        context = {'scenario': scenario}
+        context = {
+            'scenario': scenario,
+            'choice1': Choice.objects.get(type='Good', the_scenario=scenario, level=0).name,
+            'choice2': Choice.objects.get(type='Neutral', the_scenario=scenario, level=0).name,
+            'choice3': Choice.objects.get(type='Evil', the_scenario=scenario, level=0).name
+            }
         return render(request, 'game.html', context)
-    
+
     def post(self, request):
-            choice = request.POST.get('choice')
-            scenario = Scenario.objects.get(pk=1)
+            choice = Choice.objects.get(name=request.POST.get('choice'))
+            choice.save()
             # check if the choice matches the winning option of the scenario
-            if choice == scenario.winning_option:
-                return render(request, 'win.html')
-            else:
-                return render(request, 'lose.html')
+            # if choice == Choice.objects.get(type='Good').name:
+            return redirect('outcome', type=choice.type)
+            # elif choice == Choice.objects.get(type='Neutral').name:
+            #     return redirect('outcome', type=choice.type)
+            # elif choice == Choice.objects.get(type='Evil').name:
+            #     return redirect('outcome')
+
+class OutcomeView(View):
+    def get(self, request, type):
+        outcome = Outcome.objects.get(type=type)
+        choice1 = outcome.choices.get(type='Good')
+        choice2 = outcome.choices.get(type='Neutral')
+        choice3 = outcome.choices.get(type='Evil')
+        context = {
+            'outcome': outcome,
+            'choice1': choice1.name,
+            'choice2': choice2.name,
+            'choice3': choice3.name
+        }
+        return render(request, 'outcome.html', context)
 
 class WinView(View):
     def get(self, request):
