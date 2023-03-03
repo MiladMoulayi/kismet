@@ -4,36 +4,20 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Kismet Home</title>
 </head>
 <body>
   <h2>Kismet</h2>
   <p>Before you start your journey please choose your path!</p>
 
 
-<form method="POST" action="{% url 'home' %}">
+<form method="POST" c>
   {% csrf_token %}
-  {{ form }}
   <div>
-    <p>
-      Path of Virtue
-      <input type="submit" name="create" value="Create" />
-    </p>
-    <p>
-      Path of Vice
-      <input type="submit" name="create" value="Create" />
-    </p>
-    <p>
-      Path of Neutrality 
-      <input type="submit" name="create" value="Create" />
-    </p>
+    {{ form }}  <input type="submit" name="create" value="Create" />
+    <p></p>
+    <p><a href="{% url 'character_list' %}">Character List</a></p>
   </div>
 </form>
-{% comment %} <ul>
-  {% for character in character_list %}
-    <li>{{ character.name }}</li>
-  {% endfor %}
-</ul> {% endcomment %}
-
 </body>
 </html>
