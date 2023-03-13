@@ -4,19 +4,24 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
   <title>Kismet GamePlay</title>
 </head>
 <html>
   <body>
-    <h1>{{ scenario.name }}</h1>
-    <p>{{ scenario.description }}</p>
-    <form method="POST">
-      {% csrf_token %}
-      <input type="radio" name="choice" value="{{ choice1 }}"> {{ choice1 }}<br>
-      <input type="radio" name="choice" value="{{ choice2 }}"> {{ choice2 }}<br>
-      <input type="radio" name="choice" value="{{ choice3 }}"> {{ choice3 }}<br>
-      <br>
-      <input type="submit" value="Choose">
-    </form>
+    <div class="container">
+      <h1>{{ scenario.name }}</h1>
+      <img src="{% static 'images/gta-test.jpg' %}" alt="GTA Image">
+      <p>{{ scenario.description }}</p>
+      <form method="POST">
+        {% csrf_token %}
+        <input type="radio" name="choice" value="{{ choice1 }}"> {{ choice1 }}<br>
+        <input type="radio" name="choice" value="{{ choice2 }}"> {{ choice2 }}<br>
+        <input type="radio" name="choice" value="{{ choice3 }}"> {{ choice3 }}<br>
+        <br>
+        <input type="submit" value="Choose">
+      </form>
+  </div>
   </body>
 </html>
